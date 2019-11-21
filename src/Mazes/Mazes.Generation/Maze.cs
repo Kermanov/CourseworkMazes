@@ -66,29 +66,5 @@ namespace Mazes.Generation
             get => cells[cellPosition.Row, cellPosition.Col];
             set => cells[cellPosition.Row, cellPosition.Col] = value;
         }
-
-        public List<CellPosition> GetNextCellPositions(CellPosition cellPosition)
-        {
-            var nextCellPositions = new List<CellPosition>();
-
-            if (cellPosition.Row > 0)
-            {
-                nextCellPositions.Add(new CellPosition(cellPosition.Row - 1, cellPosition.Col));
-            }
-            if (cellPosition.Row < Height - 1)
-            {
-                nextCellPositions.Add(new CellPosition(cellPosition.Row + 1, cellPosition.Col));
-            }
-            if (cellPosition.Col > 0)
-            {
-                nextCellPositions.Add(new CellPosition(cellPosition.Row, cellPosition.Col - 1));
-            }
-            if (cellPosition.Col < Width - 1)
-            {
-                nextCellPositions.Add(new CellPosition(cellPosition.Row, cellPosition.Col + 1));
-            }
-
-            return nextCellPositions;
-        }
     }
 }

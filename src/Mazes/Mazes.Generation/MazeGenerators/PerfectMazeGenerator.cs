@@ -69,9 +69,33 @@ namespace Mazes.Generation.MazeGenerators
             return visitedCells[cellPosition.Row, cellPosition.Col];
         }
 
+        public List<CellPosition> GetNextCellPositions(CellPosition cellPosition)
+        {
+            var nextCellPositions = new List<CellPosition>();
+
+            if (cellPosition.Row > 0)
+            {
+                nextCellPositions.Add(new CellPosition(cellPosition.Row - 1, cellPosition.Col));
+            }
+            if (cellPosition.Row < maze.Height - 1)
+            {
+                nextCellPositions.Add(new CellPosition(cellPosition.Row + 1, cellPosition.Col));
+            }
+            if (cellPosition.Col > 0)
+            {
+                nextCellPositions.Add(new CellPosition(cellPosition.Row, cellPosition.Col - 1));
+            }
+            if (cellPosition.Col < maze.Width - 1)
+            {
+                nextCellPositions.Add(new CellPosition(cellPosition.Row, cellPosition.Col + 1));
+            }
+
+            return nextCellPositions;
+        }
+
         private CellPosition GetNextRandomUnvisitedCellPos(CellPosition cellPosition)
         {
-            var nextCellPositions = maze.GetNextCellPositions(cellPosition);
+            var nextCellPositions = GetNextCellPositions(cellPosition);
             nextCellPositions.RemoveAll(cellPos => IsVisited(cellPos));
 
             if (nextCellPositions.Count > 0)
