@@ -19,9 +19,19 @@ namespace Mazes.Visualization
         private double cellSize;
         private Pen cellPen;
         private double defaultPenThickness;
+        private Maze maze;
         private MazeStyle mazeStyle;
 
-        public Maze Maze { get; set; }
+        public Maze Maze
+        {
+            get => maze;
+            set
+            {
+                maze = value;
+                this.InvalidateVisual();
+            }
+        }
+
         public MazeStyle MazeStyle
         {
             get => mazeStyle;
