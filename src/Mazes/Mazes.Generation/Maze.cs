@@ -14,11 +14,15 @@ namespace Mazes.Generation
     public class Cell
     {
         public SideState TopSide { get; set; }
+        public SideState RightSide { get; set; }
+        public SideState BottomSide { get; set; }
         public SideState LeftSide { get; set; }
 
         public Cell()
         {
             TopSide = SideState.Closed;
+            RightSide = SideState.Closed;
+            BottomSide = SideState.Closed;
             LeftSide = SideState.Closed;
         }
     }
