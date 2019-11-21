@@ -5,11 +5,45 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Mazes.Visualization"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="900">
+        Title="Mazes" Height="600" Width="900" MinHeight="600" MinWidth="900">
     <Grid x:Name="mainGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition Width="200"></ColumnDefinition>
         </Grid.ColumnDefinitions>
+
+        <GroupBox x:Name="groupBox" Grid.Column="1" Header="Controls" Background="WhiteSmoke">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label x:Name="widthLabel" Content="Width" Width="50"/>
+                    <TextBox x:Name="widthTextBox" Text="20" TextWrapping="Wrap" VerticalContentAlignment="Center" Width="138" MaxLength="3" Margin="0, 2, 0, 2"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <Label x:Name="heightLabel" Content="Height" Width="50"/>
+                    <TextBox x:Name="heightTextBox" Text="20" TextWrapping="Wrap" VerticalContentAlignment="Center" Width="138" MaxLength="3" Margin="0, 2, 0, 2"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <Label x:Name="mazeTypeLabel" Content="Type" Width="50"/>
+                    <ComboBox x:Name="mazeTypeComboBox" Width="138" Margin="0, 2, 0, 2" SelectedIndex="0">
+                        <ComboBoxItem>Perfect maze</ComboBoxItem>
+                    </ComboBox>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <Label x:Name="mazeStyleLabel" Content="Style" Width="50"/>
+                    <ComboBox x:Name="mazeStyleComboBox" Width="138" Margin="0, 2, 0, 2" SelectedIndex="0" DropDownClosed="mazeStyleComboBox_DropDownClosed">
+                        <ComboBoxItem>Default</ComboBoxItem>
+                        <ComboBoxItem>Bold</ComboBoxItem>
+                    </ComboBox>
+                </StackPanel>
+
+                <Button x:Name="generateButton" Content="Generate" Width="188" Margin="0, 2, 0, 2" Height="25" Click="generateButton_Click"/>
+
+            </StackPanel>
+        </GroupBox>
+
+
     </Grid>
 </Window>
