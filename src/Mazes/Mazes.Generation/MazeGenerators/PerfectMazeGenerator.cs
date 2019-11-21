@@ -72,7 +72,7 @@ namespace Mazes.Generation.MazeGenerators
         private CellPosition GetNextRandomUnvisitedCellPos(CellPosition cellPosition)
         {
             var nextCellPositions = maze.GetNextCellPositions(cellPosition);
-            nextCellPositions.RemoveAll(cellPos => !IsVisited(cellPos));
+            nextCellPositions.RemoveAll(cellPos => IsVisited(cellPos));
 
             if (nextCellPositions.Count > 0)
             {
@@ -89,19 +89,23 @@ namespace Mazes.Generation.MazeGenerators
         {
             if (cellPos1.Row < cellPos2.Row)
             {
+                maze[cellPos1].BottomSide = SideState.Open;
                 maze[cellPos2].TopSide = SideState.Open;
             }
             if (cellPos1.Row > cellPos2.Row)
             {
                 maze[cellPos1].TopSide = SideState.Open;
+                maze[cellPos2].BottomSide = SideState.Open;
             }
             if (cellPos1.Col < cellPos2.Col)
             {
+                maze[cellPos1].RightSide = SideState.Open;
                 maze[cellPos2].LeftSide = SideState.Open;
             }
             if (cellPos1.Col > cellPos2.Col)
             {
                 maze[cellPos1].LeftSide = SideState.Open;
+                maze[cellPos2].RightSide = SideState.Open;
             }
         }
 
