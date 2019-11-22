@@ -69,7 +69,7 @@ namespace Mazes.Generation.MazeGenerators
             return visitedCells[cellPosition.Row, cellPosition.Col];
         }
 
-        public List<CellPosition> GetNextCellPositions(CellPosition cellPosition)
+        private List<CellPosition> GetNextCellPositions(CellPosition cellPosition)
         {
             var nextCellPositions = new List<CellPosition>();
 
