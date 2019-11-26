@@ -33,13 +33,13 @@
 
                 <StackPanel Orientation="Horizontal">
                     <Label x:Name="mazeStyleLabel" Content="Style" Width="50"/>
-                    <ComboBox x:Name="mazeStyleComboBox" Width="138" Margin="0, 2, 0, 2" SelectedIndex="0" DropDownClosed="mazeStyleComboBox_DropDownClosed">
+                    <ComboBox x:Name="mazeStyleComboBox" Width="138" Margin="0, 2, 0, 2" SelectedIndex="0">
                         <ComboBoxItem>Default</ComboBoxItem>
                         <ComboBoxItem>Bold</ComboBoxItem>
                     </ComboBox>
                 </StackPanel>
 
-                <Button x:Name="generateButton" Content="Generate" Width="188" Margin="0, 2, 0, 2" Height="25" Click="generateButton_Click"/>
+                <Button x:Name="generateButton" Content="Generate" Width="188" Margin="0, 2, 0, 2" Height="25"/>
 
             </StackPanel>
         </GroupBox>
