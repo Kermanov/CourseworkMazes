@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Mazes.Generation;
+using Mazes.Generation.MazeGenerators;
+using Mazes.Generation.Interfaces;
 
 namespace Mazes.Visualization
 {
@@ -24,6 +26,39 @@ namespace Mazes.Visualization
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void generateButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                int sideSize = int.Parse(sideSizeTextBox.Text);
+
+                IMazeGenerator mazeGenerator = null;
+                if (mazeTypeComboBox.SelectedIndex == 0)
+                {
+                    mazeGenerator = new PerfectMazeGenerator();
+                }
+
+                var maze = mazeGenerator.Generate(sideSize, sideSize);
+                mazeScreen.SetMaze(maze);
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void mazeStyleComboBox_DropDownClosed(object sender, EventArgs e)
+        {
+            if (mazeStyleComboBox.SelectedIndex == 0)
+            {
+                mazeScreen.SetStyle(MazeStyle.Default);
+            }
+            else if (mazeStyleComboBox.SelectedIndex == 1)
+            {
+                mazeScreen.SetStyle(MazeStyle.Bold);
+            }
         }
     }
 }
