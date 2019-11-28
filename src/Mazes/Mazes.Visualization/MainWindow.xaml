@@ -14,7 +14,7 @@
 
         <local:MazeScreen x:Name="mazeScreen" Grid.Column="0" Width="750" Height="750" RenderOptions.BitmapScalingMode="HighQuality"/>
 
-        <GroupBox x:Name="groupBox" Grid.Column="1" Header="Controls" Background="WhiteSmoke">
+        <GroupBox x:Name="groupBox" Grid.Column="1" Header="Generation" Background="WhiteSmoke">
             <StackPanel>
                 
                 <StackPanel Orientation="Horizontal">
@@ -40,6 +40,8 @@
 
                 <Button x:Name="generateButton" Content="Generate" Width="188" Margin="0, 2, 0, 2" Height="25" Click="generateButton_Click"/>
 
+                <ProgressBar x:Name="generationProgressBar" Width="188" Height="15" Margin="0, 2, 0, 2"/>
+                
             </StackPanel>
         </GroupBox>
 

@@ -28,7 +28,7 @@ namespace Mazes.Visualization
             InitializeComponent();
         }
 
-        private void generateButton_Click(object sender, RoutedEventArgs e)
+        private async void generateButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -44,7 +44,12 @@ namespace Mazes.Visualization
                     mazeGenerator = new PrimaModifiedGenerator();
                 }
 
-                var maze = mazeGenerator.Generate(sideSize, sideSize);
+                generationProgressBar.IsIndeterminate = true;
+                generateButton.IsEnabled = false;
+                var maze = await Task.Run(() => mazeGenerator.Generate(sideSize, sideSize));
+                generationProgressBar.IsIndeterminate = false;
+                generateButton.IsEnabled = true;
+
                 mazeScreen.SetMaze(maze);
             }
             catch (Exception ex)
