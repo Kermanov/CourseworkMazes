@@ -19,7 +19,7 @@
                 
                 <StackPanel Orientation="Horizontal">
                     <Label x:Name="sideSizeLabel" Content="Side size" Width="55"/>
-                    <TextBox x:Name="sideSizeTextBox" Text="64" TextWrapping="Wrap" VerticalContentAlignment="Center" Width="138" MaxLength="3" Margin="0, 2, 0, 2"/>
+                    <TextBox x:Name="sideSizeTextBox" Text="64" TextWrapping="Wrap" VerticalContentAlignment="Center" Width="133" MaxLength="3" Margin="0, 2, 0, 2"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">
