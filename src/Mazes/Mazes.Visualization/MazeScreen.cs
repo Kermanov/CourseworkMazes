@@ -131,8 +131,6 @@ namespace Mazes.Visualization
 
         private void UpdateCellSize()
         {
-            cellSize = 25;
-
             cellSize = (int)Math.Round(750f / maze.Height);
 
             this.Width = cellSize * (maze.Height + 0.5);
