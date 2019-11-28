@@ -13,8 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Mazes.Generation;
-using Mazes.Generation.MazeGenerators;
 using Mazes.Generation.Interfaces;
+using Mazes.Generation.MazeGenerators;
 
 namespace Mazes.Visualization
 {
@@ -37,7 +37,7 @@ namespace Mazes.Visualization
                 IMazeGenerator mazeGenerator = null;
                 if (mazeTypeComboBox.SelectedIndex == 0)
                 {
-                    mazeGenerator = new PerfectMazeGenerator();
+                    mazeGenerator = new RecursiveBacktrackerGenerator();
                 }
 
                 var maze = mazeGenerator.Generate(sideSize, sideSize);

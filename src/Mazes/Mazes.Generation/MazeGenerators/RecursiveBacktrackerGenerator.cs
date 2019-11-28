@@ -5,22 +5,21 @@ using System.Text;
 
 namespace Mazes.Generation.MazeGenerators
 {
-    public class PerfectMazeGenerator : IMazeGenerator
+    public class RecursiveBacktrackerGenerator : MazeGeneratorBase
     {
-        private Maze maze;
         private bool[,] visitedCells;
         private CellPosition currentPosition;
         private int visitedCounter;
         private Random rand;
         private Stack<CellPosition> stack;
 
-        public PerfectMazeGenerator()
+        public RecursiveBacktrackerGenerator()
         {
             rand = new Random();
             stack = new Stack<CellPosition>();
         }
 
-        public Maze Generate(int width, int height)
+        override public Maze Generate(int width, int height)
         {
             maze = new Maze(width, height);
             visitedCells = new bool[height, width];
@@ -69,30 +68,6 @@ namespace Mazes.Generation.MazeGenerators
             return visitedCells[cellPosition.Row, cellPosition.Col];
         }
 
-        private List<CellPosition> GetNextCellPositions(CellPosition cellPosition)
-        {
-            var nextCellPositions = new List<CellPosition>();
-
-            if (cellPosition.Row > 0)
-            {
-                nextCellPositions.Add(new CellPosition(cellPosition.Row - 1, cellPosition.Col));
-            }
-            if (cellPosition.Row < maze.Height - 1)
-            {
-                nextCellPositions.Add(new CellPosition(cellPosition.Row + 1, cellPosition.Col));
-            }
-            if (cellPosition.Col > 0)
-            {
-                nextCellPositions.Add(new CellPosition(cellPosition.Row, cellPosition.Col - 1));
-            }
-            if (cellPosition.Col < maze.Width - 1)
-            {
-                nextCellPositions.Add(new CellPosition(cellPosition.Row, cellPosition.Col + 1));
-            }
-
-            return nextCellPositions;
-        }
-
         private CellPosition GetNextRandomUnvisitedCellPos(CellPosition cellPosition)
         {
             var nextCellPositions = GetNextCellPositions(cellPosition);
@@ -106,30 +81,6 @@ namespace Mazes.Generation.MazeGenerators
             else
             {
                 return null;
-            }
-        }
-
-        private void RemoveWall(CellPosition cellPos1, CellPosition cellPos2)
-        {
-            if (cellPos1.Row < cellPos2.Row)
-            {
-                maze[cellPos1].BottomSide = SideState.Open;
-                maze[cellPos2].TopSide = SideState.Open;
-            }
-            if (cellPos1.Row > cellPos2.Row)
-            {
-                maze[cellPos1].TopSide = SideState.Open;
-                maze[cellPos2].BottomSide = SideState.Open;
-            }
-            if (cellPos1.Col < cellPos2.Col)
-            {
-                maze[cellPos1].RightSide = SideState.Open;
-                maze[cellPos2].LeftSide = SideState.Open;
-            }
-            if (cellPos1.Col > cellPos2.Col)
-            {
-                maze[cellPos1].LeftSide = SideState.Open;
-                maze[cellPos2].RightSide = SideState.Open;
             }
         }
 
