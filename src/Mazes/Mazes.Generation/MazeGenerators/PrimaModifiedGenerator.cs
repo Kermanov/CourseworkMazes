@@ -6,48 +6,41 @@ namespace Mazes.Generation.MazeGenerators
 {
     public class PrimaModifiedGenerator : MazeGeneratorBase
     {
-        private List<CellPosition> internalCells;
-        private List<CellPosition> boundaryCells;
-        private List<CellPosition> externalCells;
+        private enum State: byte
+        {
+            External,
+            Boundary,
+            Internal
+        }
+
+        private State[,] cellsState;
+        private uint internalCounter;
         private Random rand;
 
         public PrimaModifiedGenerator()
         {
-            internalCells = new List<CellPosition>();
-            boundaryCells = new List<CellPosition>();
-            externalCells = new List<CellPosition>();
             rand = new Random();
         }
 
         public override Maze Generate(int width, int height)
         {
             maze = new Maze(width, height);
-
-            for (int i = 0; i < maze.Height; ++i)
-            {
-                for (int j = 0; j < maze.Width; ++j)
-                {
-                    externalCells.Add(new CellPosition(i, j));
-                }
-            }
+            cellsState = new State[height, width];
+            internalCounter = 0;
 
             var startCell = new CellPosition(0, 0);
-            externalCells.Remove(startCell);
-            internalCells.Add(startCell);
+            SetInternal(startCell);
             SetNextExternalToBoundary(startCell);
 
-            while (boundaryCells.Count > 0)
+            while (internalCounter < maze.Width * maze.Height)
             {
-                var randomBoundary = GetRandom(boundaryCells);
+                var randomBoundary = GetRandomBoundary();
                 var randomNextInternal = GetRandomNextInternal(randomBoundary);
                 RemoveWall(randomBoundary, randomNextInternal);
 
-                boundaryCells.Remove(randomBoundary);
-                internalCells.Add(randomBoundary);
+                SetInternal(randomBoundary);
                 SetNextExternalToBoundary(randomBoundary);
             }
-
-            internalCells.Clear();
 
             return maze;
         }
@@ -57,33 +50,43 @@ namespace Mazes.Generation.MazeGenerators
             var nextCells = GetNextCellPositions(cellPosition);
             foreach (var cellPos in nextCells)
             {
-                if (externalCells.Contains(cellPos))
+                if (cellsState[cellPos.Row, cellPos.Col] == State.External)
                 {
-                    externalCells.Remove(cellPos);
-                    boundaryCells.Add(cellPos);
+                    cellsState[cellPos.Row, cellPos.Col] = State.Boundary;
                 }
-            }
-        }
-
-        private CellPosition GetRandom(List<CellPosition> list)
-        {
-            if (list.Count > 0)
-            {
-                var randomIndex = rand.Next(0, list.Count);
-                return list[randomIndex];
-            }
-            else
-            {
-                return null;
             }
         }
 
         private CellPosition GetRandomNextInternal(CellPosition cellPosition)
         {
             var nextCells = GetNextCellPositions(cellPosition);
-            nextCells.RemoveAll(cell => !internalCells.Contains(cell));
-            var randomNextInternal = GetRandom(nextCells);
-            return randomNextInternal;
+            nextCells.RemoveAll(cell => cellsState[cell.Row, cell.Col] != State.Internal);
+            var randomIndex = rand.Next(0, nextCells.Count);
+            return nextCells[randomIndex];
+        }
+
+        private void SetInternal(CellPosition cellPosition)
+        {
+            cellsState[cellPosition.Row, cellPosition.Col] = State.Internal;
+            internalCounter++;
+        }
+
+        private CellPosition GetRandomBoundary()
+        {
+            var boundaryCells = new List<CellPosition>();
+            for (int i = 0; i < maze.Height; ++i)
+            {
+                for (int j = 0; j < maze.Width; ++j)
+                {
+                    if (cellsState[i, j] == State.Boundary)
+                    {
+                        boundaryCells.Add(new CellPosition(i, j));
+                    }
+                }
+            }
+
+            var randomIndex = rand.Next(0, boundaryCells.Count);
+            return boundaryCells[randomIndex];
         }
     }
 }
