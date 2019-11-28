@@ -39,13 +39,17 @@ namespace Mazes.Visualization
                 {
                     mazeGenerator = new RecursiveBacktrackerGenerator();
                 }
+                else if (mazeTypeComboBox.SelectedIndex == 1)
+                {
+                    mazeGenerator = new PrimaModifiedGenerator();
+                }
 
                 var maze = mazeGenerator.Generate(sideSize, sideSize);
                 mazeScreen.SetMaze(maze);
             }
             catch (Exception ex)
             {
-
+                MessageBox.Show(ex.Message, "Error");
             }
         }
 

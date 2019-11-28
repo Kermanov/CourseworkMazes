@@ -25,7 +25,8 @@
                 <StackPanel Orientation="Horizontal">
                     <Label x:Name="mazeTypeLabel" Content="Type" Width="55"/>
                     <ComboBox x:Name="mazeTypeComboBox" Width="133" Margin="0, 2, 0, 2" SelectedIndex="0">
-                        <ComboBoxItem>Perfect maze</ComboBoxItem>
+                        <ComboBoxItem>Recursive backtracker</ComboBoxItem>
+                        <ComboBoxItem>Prima modified</ComboBoxItem>
                     </ComboBox>
                 </StackPanel>
 
