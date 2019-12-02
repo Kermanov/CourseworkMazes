@@ -27,6 +27,7 @@
                     <ComboBox x:Name="mazeTypeComboBox" Width="133" Margin="0, 2, 0, 2" SelectedIndex="0">
                         <ComboBoxItem>Recursive backtracker</ComboBoxItem>
                         <ComboBoxItem>Prima modified</ComboBoxItem>
+                        <ComboBoxItem>Aldous-Broder</ComboBoxItem>
                     </ComboBox>
                 </StackPanel>
 

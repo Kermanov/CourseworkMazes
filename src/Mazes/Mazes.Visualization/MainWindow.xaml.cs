@@ -43,6 +43,10 @@ namespace Mazes.Visualization
                 {
                     mazeGenerator = new PrimaModifiedGenerator();
                 }
+                else if (mazeTypeComboBox.SelectedIndex == 2)
+                {
+                    mazeGenerator = new AldousBroderGenerator();
+                }
 
                 generationProgressBar.IsIndeterminate = true;
                 generateButton.IsEnabled = false;
