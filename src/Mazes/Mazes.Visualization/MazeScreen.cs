@@ -30,6 +30,7 @@ namespace Mazes.Visualization
         private int cellSize;
         private int wallThickness;
         private MazeStyle mazeStyle;
+        private const int mazePixelSize = 600;
 
         public void SetMaze(Maze maze)
         {
@@ -110,8 +111,14 @@ namespace Mazes.Visualization
                     }
                 }
 
-                spriteBatch.Draw(pixel, new Rectangle(0, maze.Height * cellSize, maze.Width * cellSize + wallThickness, wallThickness), Color.Black);
-                spriteBatch.Draw(pixel, new Rectangle(maze.Width * cellSize, 0, wallThickness, maze.Width * cellSize + wallThickness), Color.Black);
+                spriteBatch.Draw(
+                    pixel,
+                    new Rectangle(0, maze.Height * cellSize, maze.Width * cellSize + wallThickness, wallThickness),
+                    Color.Black);
+
+                spriteBatch.Draw(
+                    pixel, new Rectangle(maze.Width * cellSize, 0, wallThickness, maze.Width * cellSize + wallThickness),
+                    Color.Black);
 
                 spriteBatch.End();
             }
@@ -131,7 +138,7 @@ namespace Mazes.Visualization
 
         private void UpdateCellSize()
         {
-            cellSize = (int)Math.Round(750f / maze.Height);
+            cellSize = (int)Math.Round((float)mazePixelSize / maze.Height);
 
             this.Width = cellSize * (maze.Height + 0.5);
             this.Height = cellSize * (maze.Height + 0.5);
