@@ -19,6 +19,10 @@ namespace Mazes.Visualization
         private static RenderWindow window;
         private static DrawableMaze drawableMaze;
         private static ComboBox comboBox;
+        private static Grid grid;
+        private static Button generateButton;
+        private static Label sliderLabel;
+        private static Slider slider;
         private static Gui gui;
 
         static Program()
@@ -63,7 +67,13 @@ namespace Mazes.Visualization
                 mazeGenerator = new RecursiveBacktrackerGenerator();
             }
 
-            var maze = mazeGenerator.Generate(40, 40);
+            var size = 40;
+            if (slider != null)
+            {
+                size = (int)slider.Value;
+            }
+
+            var maze = mazeGenerator.Generate(size, size);
             drawableMaze = new DrawableMaze(maze, (int)window.Size.Y - 20, (int)window.Size.Y - 20, 5);
             drawableMaze.Position = new Vector2f(10, 10);
         }
@@ -80,7 +90,15 @@ namespace Mazes.Visualization
         {
             gui = new Gui(window);
 
-            var generateButton = new Button
+            grid = new Grid
+            {
+                Position = new Vector2f(window.Size.Y + 10, 10),
+                Size = new Vector2f(150, 200)
+            };
+            gui.Add(grid);
+
+
+            generateButton = new Button
             {
                 Text = "Generate",
                 Size = new Vector2f(150, 40),
@@ -90,7 +108,7 @@ namespace Mazes.Visualization
             {
                 NewDrawableMaze();
             };
-            gui.Add(generateButton);
+            grid.AddWidget(generateButton, 0, 0);
 
 
             comboBox = new ComboBox
@@ -105,7 +123,25 @@ namespace Mazes.Visualization
             comboBox.AddItem("Prima Modified", "1");
             comboBox.AddItem("Recursive Backtracker", "2");
             comboBox.SetSelectedItemById("0");
-            gui.Add(comboBox);
+            grid.AddWidget(comboBox, 1, 0);
+
+
+            sliderLabel = new Label
+            {
+                Text = "Maze size",
+                Size = new Vector2f(150, 30)
+            };
+            grid.AddWidget(sliderLabel, 2, 0);
+
+
+            slider = new Slider
+            {
+                Size = new Vector2f(150, 30),
+                Minimum = 10,
+                Maximum = 40,
+                Step = 5
+            };
+            grid.AddWidget(slider, 3, 0);
         }
     }
 }
