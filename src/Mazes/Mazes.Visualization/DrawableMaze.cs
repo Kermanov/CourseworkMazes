@@ -17,6 +17,7 @@ namespace Mazes.Visualization
         private readonly float lineThickness;
 
         public Vector2f Position { get; set; }
+        public Vector2f Size { get; }
 
         public DrawableMaze(Maze maze, int pixelWidth, int pixelHeight, float lineThickness)
         {
@@ -24,6 +25,8 @@ namespace Mazes.Visualization
             this.lineThickness = lineThickness;
             cellWidth = pixelWidth / maze.Width;
             cellHeight = pixelHeight / maze.Height;
+
+            Size = new Vector2f(pixelWidth, pixelHeight);
         }
 
         private void DrawCell(int row, int col, RenderTarget target)
