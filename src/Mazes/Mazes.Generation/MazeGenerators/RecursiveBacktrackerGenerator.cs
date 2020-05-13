@@ -34,8 +34,8 @@ namespace Mazes.Generation.MazeGenerators
                 if (nextRandomUnvisitedCellPos != null)
                 {
                     stack.Push(currentPosition);
-                    RemoveWall(currentPosition, nextRandomUnvisitedCellPos);
-                    currentPosition = nextRandomUnvisitedCellPos;
+                    RemoveWall(currentPosition, nextRandomUnvisitedCellPos.Value);
+                    currentPosition = nextRandomUnvisitedCellPos.Value;
                     SetVisited(currentPosition);
                 }
                 else if (stack.Count > 0)
@@ -68,7 +68,7 @@ namespace Mazes.Generation.MazeGenerators
             return visitedCells[cellPosition.Row, cellPosition.Col];
         }
 
-        private CellPosition GetNextRandomUnvisitedCellPos(CellPosition cellPosition)
+        private CellPosition? GetNextRandomUnvisitedCellPos(CellPosition cellPosition)
         {
             var nextCellPositions = GetNextCellPositions(cellPosition);
             nextCellPositions.RemoveAll(cellPos => IsVisited(cellPos));
