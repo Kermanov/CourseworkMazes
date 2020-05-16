@@ -155,10 +155,11 @@ namespace Mazes.Visualization
             };
             solveButton.Pressed += (s, e) =>
             {
-                var mazeSolver = new WallFollowerSolver(TurningDirection.Right);
-                mazeSolver.Solve(maze, new CellPosition(0, 0), new CellPosition(maze.Height - 1, maze.Width - 1));
-                drawableMaze.Path = mazeSolver.Solution;
-                drawableMaze.FinalPath = mazeSolver.FinalSolution;
+                // var mazeSolver = new WallFollowerSolver(TurningDirection.Right);
+                var mazeSolver = new RecursiveBacktrackerSolver();
+                var solution = mazeSolver.Solve(maze, new CellPosition(0, 0), new CellPosition(maze.Height - 1, maze.Width - 1));
+                drawableMaze.Path = solution.FullPath;
+                drawableMaze.FinalPath = solution.Solution;
             };
             grid.AddWidget(solveButton, 4, 0);
         }
