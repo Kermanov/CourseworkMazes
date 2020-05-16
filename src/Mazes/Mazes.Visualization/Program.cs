@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Mazes.Generation;
 using Mazes.Generation.Interfaces;
 using Mazes.Generation.MazeGenerators;
+using Mazes.Solving.Interfaces;
+using Mazes.Solving.MazeSolvers;
 using SFML;
 using SFML.Graphics;
 using SFML.System;
@@ -24,6 +26,9 @@ namespace Mazes.Visualization
         private static Label sliderLabel;
         private static Slider slider;
         private static Gui gui;
+        private static Button solveButton;
+
+        private static Maze maze;
 
         static Program()
         {
@@ -73,7 +78,7 @@ namespace Mazes.Visualization
                 size = (int)slider.Value;
             }
 
-            var maze = mazeGenerator.Generate(size, size);
+            maze = mazeGenerator.Generate(size, size);
             drawableMaze = new DrawableMaze(maze, (int)window.Size.Y - 20, (int)window.Size.Y - 20, 5);
             drawableMaze.Position = new Vector2f(10, 10);
         }
@@ -137,11 +142,25 @@ namespace Mazes.Visualization
             slider = new Slider
             {
                 Size = new Vector2f(150, 30),
-                Minimum = 10,
+                Minimum = 5,
                 Maximum = 40,
                 Step = 5
             };
             grid.AddWidget(slider, 3, 0);
+
+            solveButton = new Button
+            {
+                Text = "Solve",
+                Size = new Vector2f(150, 40)
+            };
+            solveButton.Pressed += (s, e) =>
+            {
+                var mazeSolver = new WallFollowerSolver(TurningDirection.Right);
+                mazeSolver.Solve(maze, new CellPosition(0, 0), new CellPosition(maze.Height - 1, maze.Width - 1));
+                drawableMaze.Path = mazeSolver.Solution;
+                drawableMaze.FinalPath = mazeSolver.FinalSolution;
+            };
+            grid.AddWidget(solveButton, 4, 0);
         }
     }
 }

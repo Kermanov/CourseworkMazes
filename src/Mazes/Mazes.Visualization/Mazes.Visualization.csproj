@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DrawableMaze.cs" />
+    <Compile Include="PathDrawer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -75,6 +76,10 @@
     <ProjectReference Include="..\Mazes.Generation\Mazes.Generation.csproj">
       <Project>{4822595f-2a29-49d1-9f98-dcfffbd80bae}</Project>
       <Name>Mazes.Generation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mazes.Solving\Mazes.Solving.csproj">
+      <Project>{19e7f098-86b5-4687-8a5f-16a5af1c6a3d}</Project>
+      <Name>Mazes.Solving</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

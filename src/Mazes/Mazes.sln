@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mazes.Generation", "Mazes.G
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mazes.Visualization", "Mazes.Visualization\Mazes.Visualization.csproj", "{4950EDD2-2B40-4F86-BA2D-89E8901314BF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mazes.Solving", "Mazes.Solving\Mazes.Solving.csproj", "{19E7F098-86B5-4687-8A5F-16A5AF1C6A3D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{4950EDD2-2B40-4F86-BA2D-89E8901314BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4950EDD2-2B40-4F86-BA2D-89E8901314BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4950EDD2-2B40-4F86-BA2D-89E8901314BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19E7F098-86B5-4687-8A5F-16A5AF1C6A3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19E7F098-86B5-4687-8A5F-16A5AF1C6A3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19E7F098-86B5-4687-8A5F-16A5AF1C6A3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19E7F098-86B5-4687-8A5F-16A5AF1C6A3D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

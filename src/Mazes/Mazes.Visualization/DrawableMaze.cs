@@ -15,9 +15,40 @@ namespace Mazes.Visualization
         private readonly float cellWidth;
         private readonly float cellHeight;
         private readonly float lineThickness;
+        private PathDrawer solutionPathDrawer;
+        private PathDrawer finalPathDrawer;
 
         public Vector2f Position { get; set; }
         public Vector2f Size { get; }
+        public List<CellPosition> Path 
+        {
+            set 
+            {
+                solutionPathDrawer = new PathDrawer(
+                    maze,
+                    value,
+                    new Color(220, 0, 0, 128),
+                    cellWidth,
+                    cellHeight,
+                    lineThickness,
+                    this.Position);
+            }
+        }
+
+        public List<CellPosition> FinalPath
+        {
+            set
+            {
+                finalPathDrawer = new PathDrawer(
+                    maze,
+                    value,
+                    new Color(0, 200, 0),
+                    cellWidth,
+                    cellHeight,
+                    lineThickness,
+                    this.Position);
+            }
+        }
 
         public DrawableMaze(Maze maze, int pixelWidth, int pixelHeight, float lineThickness)
         {
@@ -57,6 +88,23 @@ namespace Mazes.Visualization
 
         public void Draw(RenderTarget target, RenderStates states)
         {
+            DrawBack(target, states);
+
+            if (solutionPathDrawer != null)
+            {
+                target.Draw(solutionPathDrawer);
+            }
+
+            if (finalPathDrawer != null)
+            {
+                target.Draw(finalPathDrawer);
+            }
+
+            DrawWalls(target, states);
+        }
+
+        private void DrawBack(RenderTarget target, RenderStates states)
+        {
             var background = new RectangleShape
             {
                 Position = Position,
@@ -64,7 +112,10 @@ namespace Mazes.Visualization
                 FillColor = Color.White
             };
             target.Draw(background);
+        }
 
+        private void DrawWalls(RenderTarget target, RenderStates states)
+        {
             for (int i = 0; i < maze.Height; ++i)
             {
                 for (int j = 0; j < maze.Width; ++j)
