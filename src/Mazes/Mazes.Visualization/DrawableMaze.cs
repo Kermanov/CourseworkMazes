@@ -27,7 +27,7 @@ namespace Mazes.Visualization
                 solutionPathDrawer = new PathDrawer(
                     maze,
                     value,
-                    new Color(220, 0, 0, 128),
+                    new Color(220, 0, 0, 256 / 4),
                     cellWidth,
                     cellHeight,
                     lineThickness,
@@ -50,7 +50,10 @@ namespace Mazes.Visualization
             }
         }
 
-        public DrawableMaze(Maze maze, int pixelWidth, int pixelHeight, float lineThickness)
+        public CellPosition StartCell { get; set; }
+        public CellPosition EscapeCell { get; set; }
+
+        public DrawableMaze(Maze maze, int pixelWidth, int pixelHeight, float lineThickness, CellPosition startCell, CellPosition escapeCell)
         {
             this.maze = maze;
             this.lineThickness = lineThickness;
@@ -58,6 +61,9 @@ namespace Mazes.Visualization
             cellHeight = pixelHeight / maze.Height;
 
             Size = new Vector2f(pixelWidth, pixelHeight);
+
+            StartCell = startCell;
+            EscapeCell = escapeCell;
         }
 
         private void DrawCell(int row, int col, RenderTarget target)
@@ -100,6 +106,9 @@ namespace Mazes.Visualization
                 target.Draw(finalPathDrawer);
             }
 
+            DrawStartCell(StartCell, target, states);
+            DrawEscapeCell(EscapeCell, target, states);
+
             DrawWalls(target, states);
         }
 
@@ -139,6 +148,27 @@ namespace Mazes.Visualization
                 FillColor = Color.Black
             };
             target.Draw(rightLine);
+        }
+
+        private void DrawColorCell(CellPosition cell, Color color, RenderTarget target, RenderStates states)
+        {
+            var rect = new RectangleShape
+            {
+                Position = new Vector2f(cell.Col * cellWidth + Position.X, cell.Row * cellHeight + Position.Y),
+                Size = new Vector2f(cellWidth, cellHeight),
+                FillColor = color
+            };
+            target.Draw(rect);
+        }
+
+        private void DrawStartCell(CellPosition cell, RenderTarget target, RenderStates states)
+        {
+            DrawColorCell(cell, new Color(0, 0, 220), target, states);
+        }
+
+        private void DrawEscapeCell(CellPosition cell, RenderTarget target, RenderStates states)
+        {
+            DrawColorCell(cell, new Color(146, 107, 255), target, states);
         }
     }
 }

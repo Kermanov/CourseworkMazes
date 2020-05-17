@@ -42,7 +42,14 @@ namespace Mazes.Visualization
         {
             for (int i = 0; i < currentPathIndex; ++i)
             {
-                DrawPathCell(path[i], target);
+                if (i < currentPathIndex - 1)
+                {
+                    DrawPathCell(path[i], color, target);
+                }
+                else
+                {
+                    DrawPathCell(path[i], new Color(255, 250, 107), target);
+                }
             }
 
             if (currentPathIndex < path.Count)
@@ -51,7 +58,7 @@ namespace Mazes.Visualization
             }
         }
 
-        private void DrawPathCell(CellPosition cell, RenderTarget target)
+        private void DrawPathCell(CellPosition cell, Color color, RenderTarget target)
         {
             var width = cellWidth;
             if (maze[cell].RightSide == SideState.Closed)
@@ -67,8 +74,8 @@ namespace Mazes.Visualization
 
             var rect = new RectangleShape
             {
-                Position = new Vector2f(cell.Col * cellWidth + position.X + lineThickness, cell.Row * cellHeight + position.Y + lineThickness),
-                Size = new Vector2f(width, height),
+                Position = new Vector2f(cell.Col * cellWidth + position.X, cell.Row * cellHeight + position.Y),
+                Size = new Vector2f(cellWidth, cellHeight),
                 FillColor = color
             };
             target.Draw(rect);
