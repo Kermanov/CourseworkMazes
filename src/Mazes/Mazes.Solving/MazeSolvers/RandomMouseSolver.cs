@@ -26,11 +26,11 @@ namespace Mazes.Solving.MazeSolvers
             this.maze = maze;
             this.currentPosition = startCellPosition;
 
+            path.Add(currentPosition);
             while (path.Count < movesLimit && currentPosition != escapeCellPosition)
             {
                 Move();
             }
-            path.Add(currentPosition);
 
             return new MazeSolution
             {
@@ -41,8 +41,6 @@ namespace Mazes.Solving.MazeSolvers
 
         private void Move()
         {
-            path.Add(currentPosition);
-
             var nextCells = GetNextOpenCellPositions(currentPosition);
 
             if (nextCells.Count == 1)
@@ -51,14 +49,16 @@ namespace Mazes.Solving.MazeSolvers
             }
             else
             {
-                if (path.Count > 0)
+                if (path.Count > 1)
                 {
-                    nextCells.Remove(path.Last());
+                    nextCells.Remove(path[path.Count - 2]);
                 }
 
                 var randomNextCell = nextCells[random.Next(0, nextCells.Count)];
                 currentPosition = randomNextCell;
             }
+
+            path.Add(currentPosition);
         }
     }
 }
