@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Timers;
 
 namespace Mazes.Visualization
 {
@@ -16,9 +16,9 @@ namespace Mazes.Visualization
         private readonly Color color;
         private readonly float cellWidth;
         private readonly float cellHeight;
-        private readonly float lineThickness;
         private readonly Vector2f position;
         private int currentPathIndex;
+        private Timer timer;
 
         public PathDrawer(
             Maze maze,
@@ -26,7 +26,6 @@ namespace Mazes.Visualization
             Color color,
             float cellWidth,
             float cellHeight,
-            float lineThickness,
             Vector2f position)
         {
             this.maze = maze;
@@ -34,8 +33,27 @@ namespace Mazes.Visualization
             this.color = color;
             this.cellWidth = cellWidth;
             this.cellHeight = cellHeight;
-            this.lineThickness = lineThickness;
             this.position = position;
+
+            timer = new Timer(50);
+            timer.Elapsed += (s, e) =>
+            {
+                if (currentPathIndex < path.Count)
+                {
+                    currentPathIndex++;
+                }
+                else
+                {
+                    timer.Stop();
+                }
+            };
+            timer.AutoReset = true;
+            timer.Enabled = true;
+        }
+
+        public int Delay
+        {
+            set => timer.Interval = value;
         }
 
         public void Draw(RenderTarget target, RenderStates states)
@@ -51,27 +69,10 @@ namespace Mazes.Visualization
                     DrawPathCell(path[i], new Color(255, 250, 107), target);
                 }
             }
-
-            if (currentPathIndex < path.Count)
-            {
-                currentPathIndex++;
-            }
         }
 
         private void DrawPathCell(CellPosition cell, Color color, RenderTarget target)
         {
-            var width = cellWidth;
-            if (maze[cell].RightSide == SideState.Closed)
-            {
-                width -= lineThickness;
-            }
-
-            var height = cellHeight;
-            if (maze[cell].BottomSide == SideState.Closed)
-            {
-                height -= lineThickness;
-            }
-
             var rect = new RectangleShape
             {
                 Position = new Vector2f(cell.Col * cellWidth + position.X, cell.Row * cellHeight + position.Y),

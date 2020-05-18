@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,13 +23,15 @@ namespace Mazes.Visualization
         private static DrawableMaze drawableMaze;
         private static ComboBox generationCombobox;
         private static ComboBox solvingCombobox;
-        private static Grid generateSectionGrid;
-        private static Grid solveSectionGrid;
         private static Button generateButton;
-        private static Label sliderLabel;
-        private static Slider slider;
+        private static Slider mazeSizeSlider;
+        private static Slider pathDrawingSpeedSlider;
         private static Gui gui;
         private static Button solveButton;
+
+        private static int interfaceColumnWidth = 250;
+        private static int interfaceElementHeight = 40;
+        private static int horizontalSpacing = 15;
 
         private static Maze maze;
 
@@ -37,6 +40,7 @@ namespace Mazes.Visualization
             window = new RenderWindow(VideoMode.FullscreenModes[0], "Mazes", Styles.Fullscreen);
             window.Closed += (s, e) => window.Close();
             window.SetActive();
+            window.SetFramerateLimit(60);
         }
 
         static void Main(string[] args)
@@ -74,18 +78,21 @@ namespace Mazes.Visualization
                 mazeGenerator = new RecursiveBacktrackerGenerator();
             }
 
-            var size = 40;
-            if (slider != null)
+            var size = 23;
+            if (mazeSizeSlider != null)
             {
-                size = (int)slider.Value;
+                size = (int)mazeSizeSlider.Value;
             }
 
             maze = mazeGenerator.Generate(size, size);
             var startPos = new CellPosition(0, 0);
             var escapePos = new CellPosition(size - 1, size - 1);
 
-            drawableMaze = new DrawableMaze(maze, (int)window.Size.Y - 20, (int)window.Size.Y - 20, 5, startPos, escapePos);
-            drawableMaze.Position = new Vector2f(10, 10);
+            float mazeSize = window.Size.Y - 15;
+            var mazeXPosition = (window.Size.X - (mazeSize + horizontalSpacing + interfaceColumnWidth)) / 2;
+
+            drawableMaze = new DrawableMaze(maze, mazeSize, mazeSize, 5, startPos, escapePos);
+            drawableMaze.Position = new Vector2f(mazeXPosition, 5);
         }
 
         private static void SolveMaze()
@@ -97,9 +104,13 @@ namespace Mazes.Visualization
             }
             else if (solvingCombobox?.GetSelectedItemId() == "1")
             {
-                mazeSolver = new WallFollowerSolver(TurningDirection.Right);
+                mazeSolver = new WallFollowerSolver(TurningDirection.Left);
             }
             else if (solvingCombobox?.GetSelectedItemId() == "2")
+            {
+                mazeSolver = new WallFollowerSolver(TurningDirection.Right);
+            }
+            else if (solvingCombobox?.GetSelectedItemId() == "3")
             {
                 mazeSolver = new RecursiveBacktrackerSolver();
             }
@@ -107,6 +118,7 @@ namespace Mazes.Visualization
             var solution = mazeSolver.Solve(maze, new CellPosition(0, 0), new CellPosition(maze.Height - 1, maze.Width - 1));
             drawableMaze.Path = solution.FullPath ?? new List<CellPosition>();
             drawableMaze.FinalPath = solution.Solution ?? new List<CellPosition>();
+            drawableMaze.PathDrawingSpeed = (int)pathDrawingSpeedSlider.Value;
         }
 
         private static void KeyActions()
@@ -123,89 +135,174 @@ namespace Mazes.Visualization
 
             InitGenerateSection();
             InitSolveSection();
+            InitNavigationElements();
         }
 
         static void InitSolveSection()
         {
-            solveSectionGrid = new Grid
-            {
-                Position = new Vector2f(generateSectionGrid.Position.X + generateSectionGrid.Size.X + 50, 10),
-                Size = new Vector2f(150, 100)
-            };
-            gui.Add(solveSectionGrid);
-
             solveButton = new Button
             {
                 Text = "Solve",
-                Size = new Vector2f(150, 40)
+                Size = new Vector2f(interfaceColumnWidth, interfaceElementHeight * 1.5f),
+                TextSize = 20
             };
             solveButton.Pressed += (s, e) =>
             {
                 SolveMaze();   
             };
-            solveSectionGrid.AddWidget(solveButton, 0, 0);
+            gui.Add(solveButton);
+            PlaceWidgetBelow(mazeSizeSlider, solveButton, 80);
+
+            var solvingTypeLabel = new Label
+            {
+                Text = "Solving method",
+                Size = new Vector2f(interfaceColumnWidth, interfaceElementHeight / 2),
+                TextSize = 14
+            };
+            gui.Add(solvingTypeLabel);
+            PlaceWidgetBelow(solveButton, solvingTypeLabel);
 
             solvingCombobox = new ComboBox
             {
-                Size = new Vector2f(150, 30)
+                Size = new Vector2f(interfaceColumnWidth, interfaceElementHeight),
+                TextSize = 14
             };
             solvingCombobox.AddItem("Random Mouse", "0");
-            solvingCombobox.AddItem("Wall Follower", "1");
-            solvingCombobox.AddItem("Recursive Backtracker", "2");
+            solvingCombobox.AddItem("Wall Follower (left)", "1");
+            solvingCombobox.AddItem("Wall Follower (right)", "2");
+            solvingCombobox.AddItem("Recursive Backtracker", "3");
             solvingCombobox.SetSelectedItemById("0");
-            solveSectionGrid.AddWidget(solvingCombobox, 1, 0);
-            solveSectionGrid.SetWidgetPadding(solvingCombobox, new Outline(10));
+            gui.Add(solvingCombobox);
+            PlaceWidgetBelow(solvingTypeLabel, solvingCombobox, 5);
+
+            var speedSliderLabel = new Label
+            {
+                Text = "Drawing speed",
+                Size = new Vector2f(interfaceColumnWidth, interfaceElementHeight / 2),
+                TextSize = 14
+            };
+            gui.Add(speedSliderLabel);
+            PlaceWidgetBelow(solvingCombobox, speedSliderLabel);
+
+            pathDrawingSpeedSlider = new Slider
+            {
+                Size = new Vector2f(interfaceColumnWidth, interfaceElementHeight / 2),
+                Minimum = 1,
+                Maximum = 100,
+                Step = 1,
+                InvertedDirection = true,
+                Name = "Draw speed",
+                Value = 50
+            };
+            pathDrawingSpeedSlider.ValueChanged += (s, e) =>
+            {
+                drawableMaze.PathDrawingSpeed = (int)e.Value;
+            };
+            gui.Add(pathDrawingSpeedSlider);
+            PlaceWidgetBelow(speedSliderLabel, pathDrawingSpeedSlider, 5);
         }
 
         static void InitGenerateSection()
         {
-            generateSectionGrid = new Grid
-            {
-                Position = new Vector2f(window.Size.Y + 10, 10),
-                Size = new Vector2f(150, 200)
-            };
-            gui.Add(generateSectionGrid);
-
             generateButton = new Button
             {
                 Text = "Generate",
-                Size = new Vector2f(150, 40)
+                Size = new Vector2f(interfaceColumnWidth, interfaceElementHeight * 1.5f),
+                Position = new Vector2f(drawableMaze.Position.X + drawableMaze.Size.X + horizontalSpacing, 10),
+                TextSize = 20
             };
             generateButton.Pressed += (s, e) =>
             {
                 NewDrawableMaze();
             };
-            generateSectionGrid.AddWidget(generateButton, 0, 0);
+            gui.Add(generateButton);
 
+            var generetionTypeLabel = new Label
+            {
+                Text = "Generation type",
+                Size = new Vector2f(interfaceColumnWidth, interfaceElementHeight / 2),
+                TextSize = 14
+            };
+            gui.Add(generetionTypeLabel);
+            PlaceWidgetBelow(generateButton, generetionTypeLabel);
 
             generationCombobox = new ComboBox
             {
-                Size = new Vector2f(150, 30)
+                Size = new Vector2f(interfaceColumnWidth, interfaceElementHeight),
+                TextSize = 14
             };
             generationCombobox.AddItem("Aldous Broder", "0");
             generationCombobox.AddItem("Prima Modified", "1");
             generationCombobox.AddItem("Recursive Backtracker", "2");
             generationCombobox.SetSelectedItemById("0");
-            generateSectionGrid.AddWidget(generationCombobox, 1, 0);
-            generateSectionGrid.SetWidgetPadding(generationCombobox, new Outline(10));
+            gui.Add(generationCombobox);
+            PlaceWidgetBelow(generetionTypeLabel, generationCombobox, 5);
 
-
-            sliderLabel = new Label
+            var sizeSliderLabel = new Label
             {
                 Text = "Maze size",
-                Size = new Vector2f(150, 30)
+                Size = new Vector2f(interfaceColumnWidth, interfaceElementHeight / 2),
+                TextSize = 14
             };
-            generateSectionGrid.AddWidget(sliderLabel, 2, 0);
+            gui.Add(sizeSliderLabel);
+            PlaceWidgetBelow(generationCombobox, sizeSliderLabel);
 
-
-            slider = new Slider
+            mazeSizeSlider = new Slider
             {
-                Size = new Vector2f(150, 30),
-                Minimum = 5,
-                Maximum = 40,
-                Step = 5
+                Size = new Vector2f(interfaceColumnWidth, interfaceElementHeight / 2),
+                Minimum = 8,
+                Maximum = 64,
+                Step = 1,
+                Value = 23,
+                Name = "Maze size"
             };
-            generateSectionGrid.AddWidget(slider, 3, 0);
+            gui.Add(mazeSizeSlider);
+            PlaceWidgetBelow(sizeSliderLabel, mazeSizeSlider, 5);
+        }
+
+        private static void InitNavigationElements()
+        {
+            var closeImageTexture = new Texture(ImageToByte(Properties.Resources.close_image));
+            var closeImageFocusedTexture = new Texture(ImageToByte(Properties.Resources.close_image_focused));
+
+            var closeButton = new BitmapButton()
+            {
+                Image = closeImageTexture,
+                Size = new Vector2f(50, 50),
+                Position = new Vector2f(window.Size.X - 50, 0)
+            };
+            closeButton.Clicked += (s, e) =>
+            {
+                window.Close();
+            };
+            closeButton.MouseEntered += (s, e) =>
+            {
+                closeButton.Image = closeImageFocusedTexture;
+            };
+            closeButton.MouseLeft += (s, e) =>
+            {
+                closeButton.Image = closeImageTexture;
+            };
+
+            gui.Add(closeButton);
+        }
+
+        private static void PlaceWidgetBelow(Widget firstWidget, Widget secondWidget, int margin = 10)
+        {
+            secondWidget.Position = new Vector2f
+            {
+                X = firstWidget.Position.X,
+                Y = firstWidget.Position.Y + firstWidget.Size.Y + margin
+            };
+        }
+
+        public static byte[] ImageToByte(System.Drawing.Bitmap bitmap)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                bitmap.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
+                return memoryStream.ToArray();
+            }
         }
     }
 }

@@ -30,7 +30,6 @@ namespace Mazes.Visualization
                     new Color(220, 0, 0, 256 / 4),
                     cellWidth,
                     cellHeight,
-                    lineThickness,
                     this.Position);
             }
         }
@@ -42,18 +41,34 @@ namespace Mazes.Visualization
                 finalPathDrawer = new PathDrawer(
                     maze,
                     value,
-                    new Color(0, 200, 0),
+                    new Color(0, 200, 0, 256 / 2),
                     cellWidth,
                     cellHeight,
-                    lineThickness,
                     this.Position);
             }
         }
 
+        public int PathDrawingSpeed
+        {
+            set
+            {
+                if (solutionPathDrawer != null)
+                {
+                    solutionPathDrawer.Delay = value;
+                }
+
+                if (finalPathDrawer != null)
+                {
+                    finalPathDrawer.Delay = value;
+                }
+            }
+        }
+
+
         public CellPosition StartCell { get; set; }
         public CellPosition EscapeCell { get; set; }
 
-        public DrawableMaze(Maze maze, int pixelWidth, int pixelHeight, float lineThickness, CellPosition startCell, CellPosition escapeCell)
+        public DrawableMaze(Maze maze, float pixelWidth, float pixelHeight, float lineThickness, CellPosition startCell, CellPosition escapeCell)
         {
             this.maze = maze;
             this.lineThickness = lineThickness;
