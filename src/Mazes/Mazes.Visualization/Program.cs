@@ -97,22 +97,22 @@ namespace Mazes.Visualization
 
         private static void SolveMaze()
         {
-            IMazeSolver mazeSolver = new RandomMouseSolver();
+            IMazeSolver mazeSolver = new WallFollowerSolver(TurningDirection.Left);
             if (solvingCombobox?.GetSelectedItemId() == "0")
-            {
-                mazeSolver = new RandomMouseSolver();
-            }
-            else if (solvingCombobox?.GetSelectedItemId() == "1")
             {
                 mazeSolver = new WallFollowerSolver(TurningDirection.Left);
             }
-            else if (solvingCombobox?.GetSelectedItemId() == "2")
+            else if (solvingCombobox?.GetSelectedItemId() == "1")
             {
                 mazeSolver = new WallFollowerSolver(TurningDirection.Right);
             }
-            else if (solvingCombobox?.GetSelectedItemId() == "3")
+            else if (solvingCombobox?.GetSelectedItemId() == "2")
             {
                 mazeSolver = new RecursiveBacktrackerSolver();
+            }
+            else if (solvingCombobox?.GetSelectedItemId() == "3")
+            {
+                mazeSolver = new RandomMouseSolver();
             }
 
             var solution = mazeSolver.Solve(maze, new CellPosition(0, 0), new CellPosition(maze.Height - 1, maze.Width - 1));
@@ -167,10 +167,10 @@ namespace Mazes.Visualization
                 Size = new Vector2f(interfaceColumnWidth, interfaceElementHeight),
                 TextSize = 14
             };
-            solvingCombobox.AddItem("Random Mouse", "0");
-            solvingCombobox.AddItem("Wall Follower (left)", "1");
-            solvingCombobox.AddItem("Wall Follower (right)", "2");
-            solvingCombobox.AddItem("Recursive Backtracker", "3");
+            solvingCombobox.AddItem("Wall Follower (left)", "0");
+            solvingCombobox.AddItem("Wall Follower (right)", "1");
+            solvingCombobox.AddItem("Recursive Backtracker", "2");
+            solvingCombobox.AddItem("Random Mouse", "3");
             solvingCombobox.SetSelectedItemById("0");
             gui.Add(solvingCombobox);
             PlaceWidgetBelow(solvingTypeLabel, solvingCombobox, 5);
