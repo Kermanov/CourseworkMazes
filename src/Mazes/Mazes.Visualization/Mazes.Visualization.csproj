@@ -64,9 +64,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DrawableMaze.cs" />
-    <Compile Include="PathDrawer.cs" />
+    <Compile Include="DrawableElements\DrawableMaze.cs" />
+    <Compile Include="DrawableElements\PathDrawer.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="ProgramModules\Actions.cs" />
+    <Compile Include="ProgramModules\UserInterfaceInit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
