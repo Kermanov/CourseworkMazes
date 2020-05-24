@@ -8,7 +8,6 @@ namespace Mazes.Visualization
 {
     public partial class Program
     {
-        private static RenderWindow window;
         private static DrawableMaze drawableMaze;
         private static ComboBox generationCombobox;
         private static ComboBox solvingCombobox;

@@ -5,6 +5,8 @@ namespace Mazes.Visualization
 {
     public partial class Program
     {
+        private static RenderWindow window;
+
         static Program()
         {
             window = new RenderWindow(VideoMode.FullscreenModes[0], "Mazes", Styles.Fullscreen);
