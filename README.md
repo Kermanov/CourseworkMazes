@@ -5,5 +5,5 @@ University project about maze generation and solving.
 * C# language
 * .NET Standard
 * .NET Framework
-* WPF
-* MonoGame
+* SFML
+* TGUI
